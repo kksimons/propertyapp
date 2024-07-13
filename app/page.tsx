@@ -1,10 +1,13 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <div>
       <h1 className="text-7xl">Home Page</h1>
-      <Link href="/" className="text-xl text-blue-500 inline-block mt-8">about page</Link>
+      <Button variant='outline' size='lg' className="capitalize m-8">
+        Click me
+      </Button>
     </div>
   );
 }

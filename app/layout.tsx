@@ -1,7 +1,7 @@
-import Navbar from "@/components/Navbar";
 import "./globals.css";
 import {Inter, Inconsolata, Roboto} from 'next/font/google'
 import { Metadata } from "next";
+import Navbar from "@/components/navbar/Navbar";
 
 const inter = Inter({subsets:['latin']})
 const inconsolata = Inconsolata({subsets:['latin']})
@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Navbar />
-        <main className="max-w-3xl mx-auto py-10">{children}</main>
+        <main className="py-10">{children}</main>
         </body>
     </html>
   );
