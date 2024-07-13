@@ -2,6 +2,7 @@ import "./globals.css";
 import {Inter, Inconsolata, Roboto} from 'next/font/google'
 import { Metadata } from "next";
 import Navbar from "@/components/navbar/Navbar";
+import Providers from "./providers";
 
 const inter = Inter({subsets:['latin']})
 const inconsolata = Inconsolata({subsets:['latin']})
@@ -21,8 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <Providers> 
         <Navbar />
         <main className="py-10">{children}</main>
+        </Providers>
         </body>
     </html>
   );
