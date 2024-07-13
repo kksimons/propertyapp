@@ -3,6 +3,7 @@ import {Inter, Inconsolata, Roboto} from 'next/font/google'
 import { Metadata } from "next";
 import Navbar from "@/components/navbar/Navbar";
 import Providers from "./providers";
+import {ClerkProvider} from '@clerk/nextjs'
 
 const inter = Inter({subsets:['latin']})
 const inconsolata = Inconsolata({subsets:['latin']})
@@ -20,6 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <ClerkProvider>
     <html lang="en">
       <body className={inter.className}>
         <Providers> 
@@ -28,5 +30,6 @@ export default function RootLayout({
         </Providers>
         </body>
     </html>
+    </ClerkProvider>
   );
 }
