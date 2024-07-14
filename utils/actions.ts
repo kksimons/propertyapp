@@ -3,7 +3,7 @@
 import db from './db';
 import { clerkClient, currentUser } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
-import { profileSchema } from "./schemas"
+import { profileSchema, validateWithZodSchema } from "./schemas"
 import { revalidatePath } from 'next/cache';
 
 // helper function to check for routes
@@ -22,7 +22,7 @@ export const createProfileAction = async (prevState: any, formData: FormData) =>
         console.log(user)
         if(!user) throw new Error('there was an error thanks to typescript')
             const rawData = Object.fromEntries(formData)
-            const validatedFields = profileSchema.parse(rawData)
+            const validatedFields = validateWithZodSchema(profileSchema, rawData)
             // console.log(validatedFields)
         await db.profile.create({
             data: {
@@ -80,7 +80,8 @@ export const updateProfileAction = async (prevState: any, formData: FormData): P
 
     try {
         const rawData = Object.fromEntries(formData)
-        const validatedFields = profileSchema.parse(rawData)
+        // when using safeParse you get back different data, but we get back a success property boolean
+        const validatedFields = validateWithZodSchema(profileSchema, rawData)
 
         await db.profile.update({
             where: {
