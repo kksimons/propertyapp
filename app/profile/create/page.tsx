@@ -15,9 +15,9 @@ function CreateProfilePage() {
         {/* always needs inputs and action */}
         <FormContainer action={createProfileAction}>
             <div className='grid gap-4 mt-4'>
-            <FormInput type='text' name='firstName' label='First Name' />
-            <FormInput type='text' name='lastName' label='Last Name' />
-            <FormInput type='text' name='userName' label='UserName' />
+                <FormInput type='text' name='firstName' label='First Name' />
+                <FormInput type='text' name='lastName' label='Last Name' />
+                <FormInput type='text' name='username' label='Username' />
             </div>
             <SubmitButton text='Create Profile' className='mt-8' />
         </FormContainer>
