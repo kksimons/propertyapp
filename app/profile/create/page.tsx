@@ -6,8 +6,14 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import React from 'react'
 import { createProfileAction } from '@/utils/actions'
+import { currentUser } from '@clerk/nextjs/server'
+import { redirect } from 'next/navigation'
 
-function CreateProfilePage() {
+async function CreateProfilePage() {
+  // if they have a profile already we shouldn't see it anymore
+  const user = await currentUser()
+  if(user?.privateMetadata?.hasProfile) redirect('/')
+
   return (
     <section>
       <h1 className='text-2xl font-semibold mb-8 capitalize'>new user</h1>
