@@ -16,10 +16,22 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model TestProfile {
-  id   String @id @default(uuid())
-  name String
+model Profile {
+  id           String   @id @default(uuid())
+  clerkId      String   @unique
+  firstName    String
+  lastName     String
+  username     String
+  email        String
+  profileImage String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
+
+// model TestProfile {
+//   id   String @id @default(uuid())
+//   name String
+// }
 
 // -------------------------
 
@@ -29,6 +41,7 @@ model TestProfile {
 //     content: 'some task',
 //   },
 // });
+
 // Get All Records
 // const tasks = await prisma.task.findMany();
 // Get record by ID or unique identifier
@@ -54,6 +67,7 @@ model TestProfile {
 //     content: 'updated task',
 //   },
 // });
+
 // Update or create records
 // const upsertTask = await prisma.task.upsert({
 //   where: {
@@ -66,6 +80,7 @@ model TestProfile {
 //     content: 'some value',
 //   },
 // });
+
 // Delete a single record
 // const deleteTask = await prisma.task.delete({
 //   where: {
