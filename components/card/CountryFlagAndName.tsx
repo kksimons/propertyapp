@@ -1,11 +1,16 @@
-import React from 'react'
+import { findCountryByCode } from '@/utils/countries';
 
-function CountryAndFlagName() {
+function CountryFlagAndName({ countryCode }: { countryCode: string }) {
+  const validCountry = findCountryByCode(countryCode);
+  const countryName =
+    validCountry!.name.length > 20 // may need to modify this and the next if want more or less
+      ? `${validCountry!.name.substring(0, 20)}...`
+      : validCountry!.name;
   return (
-    <div>
-      
-    </div>
-  )
+    <span className='flex justify-between items-center gap-2 text-sm '>
+      {validCountry?.flag} {countryName}
+    </span>
+  );
 }
 
-export default CountryAndFlagName
+export default CountryFlagAndName;
