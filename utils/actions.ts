@@ -8,7 +8,7 @@ import { revalidatePath } from 'next/cache';
 import { uploadImage } from './supabase';
 
 // helper function to check for routes
-const getAuthUser = async() => {
+export const getAuthUser = async() => {
     const user = await currentUser()
     if(!user) {
         throw new Error('Please login to access this page')
@@ -132,18 +132,19 @@ export const updateProfileImageAction = async (
     }
     
   }
+
 export const createPropertyAction = async (
   prevState: any,
   formData: FormData
 ): Promise<{ message: string }> => {
-  const user = await getAuthUser();
+  const user = await getAuthUser()
   try {
-    const rawData = Object.fromEntries(formData);
-    const file = formData.get('image') as File;
+    const rawData = Object.fromEntries(formData)
+    const file = formData.get('image') as File
 
-    const validatedFields = validateWithZodSchema(propertySchema, rawData);
-    const validatedFile = validateWithZodSchema(imageScheme, { image: file });
-    const fullPath = await uploadImage(validatedFile.image);
+    const validatedFields = validateWithZodSchema(propertySchema, rawData)
+    const validatedFile = validateWithZodSchema(imageScheme, { image: file })
+    const fullPath = await uploadImage(validatedFile.image)
 
     await db.property.create({
       data: {
@@ -153,17 +154,17 @@ export const createPropertyAction = async (
       },
     });
   } catch (error) {
-    return renderError(error);
+    return renderError(error)
   }
-  redirect('/');
+  redirect('/')
 };
 
 export const fetchProperties = async ({
     search = '',
     category,
   }: {
-    search?: string;
-    category?: string;
+    search?: string
+    category?: string
   }) => {
     // findMany gets us everything so we can use our select to only get what we want
     const properties = await db.property.findMany({
@@ -187,4 +188,79 @@ export const fetchProperties = async ({
       }
     })
     return properties
+  }
+
+export const fetchFavoriteId = async ({
+    propertyId,
+    }: {
+    propertyId: string
+    }) => {
+
+const user = await getAuthUser()
+
+const favorite = await db.favorite.findFirst({
+    where: {
+    propertyId,
+    profileId: user.id,
+    },
+    select: {
+    id: true,
+    }
+})
+
+return favorite?.id || null
+};
+
+export const toggleFavoriteAction = async (prevState: {
+propertyId: string;
+favoriteId: string | null
+pathname: string;
+}) => {
+
+const user = await getAuthUser()
+const { propertyId, favoriteId, pathname } = prevState
+
+try {
+    if (favoriteId) {
+    await db.favorite.delete({
+        where: {
+        id: favoriteId,
+        },
+    })
+    } else {
+    await db.favorite.create({
+        data: {
+        propertyId,
+        profileId: user.id,
+        },
+    })
+    }
+
+    revalidatePath(pathname)
+    return { message: favoriteId ? 'Removed from Faves' : 'Added to Faves' }
+    } catch (error) {
+        return renderError(error)
+    }
+}
+
+export const fetchFavorites = async () => {
+    const user = await getAuthUser();
+    const favorites = await db.favorite.findMany({
+      where: {
+        profileId: user.id,
+      },
+      select: {
+        property: {
+          select: {
+            id: true,
+            name: true,
+            tagline: true,
+            price: true,
+            country: true,
+            image: true,
+          }
+        }
+      }
+    })
+    return favorites.map((favorite) => favorite.property)
   }
