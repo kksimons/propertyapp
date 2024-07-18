@@ -7,7 +7,6 @@ import { useDebouncedCallback } from 'use-debounce';
 function NavSearch() {
   const searchParams = useSearchParams();
 
-  const pathname = usePathname();
   const { replace } = useRouter();
 
   const [search, setSearch] = useState(
@@ -22,7 +21,7 @@ function NavSearch() {
     } else {
       params.delete('search');
     }
-    replace(`${pathname}?${params.toString()}`);
+    replace(`/?${params.toString()}`);
   }, 300);
 
   // if we don't have anything we need to reset
