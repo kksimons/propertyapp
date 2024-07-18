@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { createReviewSchema, imageScheme, profileSchema, propertySchema, validateWithZodSchema } from "./schemas"
 import { revalidatePath } from 'next/cache';
 import { uploadImage } from './supabase';
+import { calculateTotals } from './calculateTotals';
 
 // helper function to check for routes
 export const getAuthUser = async() => {
@@ -273,9 +274,15 @@ export const fetchPropertyDetails = (id: string) => {
         },
         include: {
             profile: true,
-        }
-    })
-}
+            Booking: {
+              select: {
+                checkIn: true,
+                checkOut: true,
+              },
+            },
+          },
+        })
+      }
 
 export async function createReviewAction(prevState: any, formData: FormData) {
   const user = await getAuthUser()
@@ -322,11 +329,116 @@ export async function fetchPropertyReviews(propertyId: string) {
   return reviews
 }
 
-//TODO
 export const fetchPropertyReviewsByUser = async () => {
-  return { message: 'fetch user reviews' }
+  const user = await getAuthUser()
+
+  const reviews = await db.review.findMany({
+    where: {
+      profileId: user.id,
+    },
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      property: {
+        select: {
+          name: true,
+          image: true,
+        },
+      },
+    },
+  })
+  return reviews
 }
 
-export const deleteReviewAction = async () => {
-  return { message: 'delete  reviews' }
+export const deleteReviewAction = async (prevState: { reviewId: string }) => {
+  const { reviewId } = prevState
+  const user = await getAuthUser()
+
+  try {
+    await db.review.delete({
+      where: {
+        id: reviewId,
+        profileId: user.id,
+      },
+    })
+
+    revalidatePath('/reviews')
+    return { message: 'Review deleted successfully' }
+  } catch (error) {
+    return renderError(error)
+  }
+}
+
+export async function fetchPropertyRating(propertyId: string) {
+  const result = await db.review.groupBy({
+    by: ['propertyId'],
+    _avg: {
+      rating: true,
+    },
+    _count: {
+      rating: true,
+    },
+    where: {
+      propertyId,
+    },
+  })
+
+  // empty array if no reviews
+  return {
+    rating: result[0]?._avg.rating?.toFixed(1) ?? 0,
+    count: result[0]?._count.rating ?? 0,
+  }
+}
+
+export const findExistingReview = async (
+  userId: string,
+  propertyId: string
+) => {
+  return db.review.findFirst({
+    where: {
+      profileId: userId,
+      propertyId: propertyId,
+    },
+  })
+}
+
+export const createBookingAction = async (prevState: {
+  propertyId: string;
+  checkIn: Date;
+  checkOut: Date;
+}) => {
+
+  const user = await getAuthUser()
+
+  const { propertyId, checkIn, checkOut } = prevState
+  const property = await db.property.findUnique({
+    where: { id: propertyId },
+    select: { price: true },
+  })
+  if (!property) {
+    return { message: 'Property not found' }
+  }
+
+  const { orderTotal, totalNights } = calculateTotals({
+    checkIn,
+    checkOut,
+    price: property.price,
+  })
+
+  try {
+    const booking = await db.booking.create({
+      data: {
+        checkIn,
+        checkOut,
+        orderTotal,
+        totalNights,
+        profileId: user.id,
+        propertyId,
+      },
+    })
+  } catch (error) {
+    return renderError(error)
+  }
+  redirect('/bookings')
 }

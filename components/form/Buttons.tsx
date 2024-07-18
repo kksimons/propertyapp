@@ -9,7 +9,7 @@ import { TfiReload } from "react-icons/tfi";
 import { getAuthUser } from "@/utils/actions";
 import db from '../../utils/db';
 import { revalidatePath } from "next/cache";
-
+import { LuTrash2, LuPenSquare } from 'react-icons/lu';
 
 type btnSize = 'default' | 'lg' | 'sm'
 
@@ -116,6 +116,35 @@ export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
       ) : (
         <FaRegHeart />
       )}
+    </Button>
+  );
+};
+
+type actionType = 'edit' | 'delete'
+
+export const IconButton = ({ actionType }: { actionType: actionType }) => {
+  const { pending } = useFormStatus();
+
+  const renderIcon = () => {
+    switch (actionType) {
+      case 'edit':
+        return <LuPenSquare />;
+      case 'delete':
+        return <LuTrash2 />;
+      default:
+        const never: never = actionType;
+        throw new Error(`Invalid action type: ${never}`);
+    }
+  }
+
+  return (
+    <Button
+      type='submit'
+      size='icon'
+      variant='link'
+      className='p-2 cursor-pointer'
+    >
+      {pending ? <TfiReload className=' animate-spin' /> : renderIcon()}
     </Button>
   );
 };
