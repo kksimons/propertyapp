@@ -1,7 +1,7 @@
 import ChartsContainer from '@/components/admin/ChartsContainer';
 import StatsContainer from '@/components/admin/StatsContainer';
-import { ChartsLoadingContainer, StatsLoadingContainer } from '@/components/admin/Loading'
-import { Suspense } from 'react'
+import { ChartsLoadingContainer, StatsLoadingContainer } from '@/components/admin/Loading';
+import { Suspense } from 'react';
 
 async function AdminPage() {
   return (
@@ -13,6 +13,7 @@ async function AdminPage() {
         <ChartsContainer />
       </Suspense>
     </>
-  );
+  )
 }
+
 export default AdminPage
