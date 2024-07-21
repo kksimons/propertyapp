@@ -9,7 +9,7 @@ function Logo() {
         <FaMountain className='w-6 h-6' />
       </Link>
     </Button>
-  );
+  )
 }
 
-export default Logo;
+export default Logo

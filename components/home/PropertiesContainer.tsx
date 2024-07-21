@@ -10,7 +10,8 @@ async function PropertiesContainer({
   category?: string;
   search?: string;
 }) {
-  const properties: PropertyCardProps[] = await fetchProperties({category, search});
+
+  const properties: PropertyCardProps[] = await fetchProperties({category, search}) 
 
   if (properties.length === 0) {
     return (
@@ -19,10 +20,10 @@ async function PropertiesContainer({
         message='Try changing or removing some of your filters.'
         btnText='Clear Filters'
       />
-    );
+    )
   }
 
-  return <PropertiesList properties={properties} />;
+  return <PropertiesList properties={properties} />
 }
 
-export default PropertiesContainer;
+export default PropertiesContainer

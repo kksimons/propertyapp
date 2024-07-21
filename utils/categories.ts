@@ -1,12 +1,8 @@
 import { IconType } from 'react-icons';
 import { MdCabin } from 'react-icons/md';
-
 import { TbCaravan, TbTent, TbBuildingCottage } from 'react-icons/tb';
-
-import { GiWoodCabin, GiMushroomHouse } from 'react-icons/gi';
+import { GiWoodCabin } from 'react-icons/gi';
 import { PiBuildingApartmentBold , PiLighthouse, PiVan, PiHouseLineBold  } from 'react-icons/pi';
-
-import { GoContainer } from 'react-icons/go';
 
 type Category = {
   label: CategoryLabel;

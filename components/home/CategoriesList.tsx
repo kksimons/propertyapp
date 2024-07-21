@@ -6,10 +6,12 @@ function CategoriesList({
   category,
   search,
 }: {
-  category?: string;
-  search?: string;
+  category?: string
+  search?: string
 }) {
-  const searchTerm = search ? `&search=${search}` : '';
+
+  const searchTerm = search ? `&search=${search}` : ''
+
   return (
     <section>
       <ScrollArea className='py-6'>
@@ -25,12 +27,13 @@ function CategoriesList({
                   <p className='capitalize text-sm mt-1'>{item.label}</p>
                 </article>
               </Link>
-            );
+            )
           })}
         </div>
         <ScrollBar orientation='horizontal' />
       </ScrollArea>
     </section>
-  );
+  )
 }
-export default CategoriesList;
+
+export default CategoriesList
