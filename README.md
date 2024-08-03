@@ -9,18 +9,29 @@ Rocky Mountain Retreats is an app in the same ecosystem as Airbnb.
 
 ## What You Can Do With It
 You can list properties you would like to rent out (Create Rental in the menu).
+
 View all the properties you have listed (My Rentals) as well as how many days they're booked for, the nightly rate you have set for them, and the total income they've brought in.
+
 You can view the bookings you have made as a user rather than renter (Bookings).
+
 You can view all the reservations you have upcoming, for how many nights, and the total cost (Reservations).
+
 You can favorite a property by clicking on the Heart icon and view your Favorites in their own page (Favorites).
+
 If you click into a property, you can make a reserveration by choosing your start and end date in the calendar.
+
 You can complete a reservation using Stripe (You can use a test card number for checkout card number: 4242424242424242 /	CSV: any 3 digits /	Expiry date: Any future date).
+
 You can see where the property is located on the map.
+
 You can leave a review, including a star rating and a comment, as long as the property is not your own listing.
+
 You can click on the orange Mountain Icon on the home page to take you back to the home page at any time, or to reset any serach parameters. 
+
 You can use the category icons to sort the properties available. 
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
 
 ## Getting Started
 
